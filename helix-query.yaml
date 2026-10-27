@@ -1,16 +1,36 @@
-version: 1
-
-indices:
-  pages:
-    include:
-      - '/**'
-    exclude:
-      - '/**.json'
-    target: /query-index.json
-    properties:
-      lastModified:
-        select: none
-        value: parseTimestamp(headers["last-modified"], "ddd, DD MMM YYYY hh:mm:ss GMT")
-      robots:
-        select: head > meta[name="robots"]
-        value: attribute(el, "content")
+{
+  "models": [
+    {
+      "id": "page-metadata",
+      "fields": [
+        {
+          "component": "text",
+          "valueType": "string",
+          "name": "jcr:title",
+          "label": "Title"
+        },
+        {
+          "component": "text",
+          "valueType": "string",
+          "name": "jcr:description",
+          "label": "Description"
+        },
+        {
+          "component": "text",
+          "valueType": "string",
+          "name": "keywords",
+          "multi": true,
+          "label": "Keywords"
+        },
+        {
+          "component": "aem-tag",
+          "label": "AEM Tag Picker",
+          "description": "Select an AEM tag",
+          "name": "cq:tags",
+          "valueType": "string",
+          "rootPath": "/content/cq:tags/wknd-shared"
+        }
+      ]
+    }
+  ]
+}
