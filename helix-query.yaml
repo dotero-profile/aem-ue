@@ -1,36 +1,30 @@
-{
-  "models": [
-    {
-      "id": "page-metadata",
-      "fields": [
-        {
-          "component": "text",
-          "valueType": "string",
-          "name": "jcr:title",
-          "label": "Title"
-        },
-        {
-          "component": "text",
-          "valueType": "string",
-          "name": "jcr:description",
-          "label": "Description"
-        },
-        {
-          "component": "text",
-          "valueType": "string",
-          "name": "keywords",
-          "multi": true,
-          "label": "Keywords"
-        },
-        {
-          "component": "aem-tag",
-          "label": "AEM Tag Picker",
-          "description": "Select an AEM tag",
-          "name": "cq:tags",
-          "valueType": "string",
-          "rootPath": "/content/cq:tags/wknd-shared"
-        }
-      ]
-    }
-  ]
-}
+# Example multi-language index file: https://github.com/hlxsites/mammotome/blob/main/helix-query.yaml
+
+version: 1
+
+indices:
+  pages:
+    include:
+      - '/**'
+    exclude:
+      - '/**.json'
+      - '/nav'
+      - '/footer'
+      - '/fragments/**'
+    target: /query-index.json
+    properties:
+      lastModified:
+        select: none
+        value: parseTimestamp(headers["last-modified"], "ddd, DD MMM YYYY hh:mm:ss GMT")
+      image:
+        select: head > meta[property="og:image"]
+        value: match(attribute(el, "content"), "https:\/\/[^/]+(/.*)")
+      title:
+        select: head > meta[property="og:title"]
+        value: attribute(el, "content")
+      description:
+        select: head > meta[name="description"]
+        value: attribute(el, "content")
+      robots:
+        select: head > meta[name="robots"]
+        value: attribute(el, "content")
